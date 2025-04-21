@@ -11,7 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.healthguard.presentation.onboarding.OnBoardingScreen
 import com.example.healthguard.ui.theme.HealthGuardTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,29 +23,13 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
             HealthGuardTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                OnBoardingScreen(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    onEvent = {}
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HealthGuardTheme {
-        Greeting("Android")
     }
 }
