@@ -14,14 +14,14 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     background = Black,
-    primary = Blue,
+    primary = SOSRed,
     error = DarkRed,
     surface = LightBlack
 )
 
 private val LightColorScheme = lightColorScheme(
-    background = Color.White,
-    primary = Blue,
+    background = White,
+    primary = SOSRed,
     error = LightRed,
     surface = Color.White
 )

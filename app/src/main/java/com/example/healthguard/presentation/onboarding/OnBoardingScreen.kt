@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
-    onEvent: (OnBoardingEvent) -> Unit,
+    onEvent: suspend (OnBoardingEvent) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         val pagerState = rememberPagerState(initialPage = 0) {
@@ -79,6 +79,7 @@ fun OnBoardingScreen(
 
                         }
                     )
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
                 ActionButton(
                     text = buttonsState.value[1],
