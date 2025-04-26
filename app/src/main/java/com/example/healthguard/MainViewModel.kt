@@ -1,12 +1,10 @@
 package com.example.healthguard
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.healthguard.presentation.navgraph.Route
 import com.example.healthguard.service.OnBoardingService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -18,20 +16,16 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val onBoardingService: OnBoardingService
 ): ViewModel() {
-    var splashCondition by mutableStateOf(true)
+    var showNavBar by mutableStateOf(false)
         private set
 
-    var startDestination by mutableStateOf(Route.AppStartNavigation.route)
+    var splashCondition by mutableStateOf(true)
         private set
 
     init {
         onBoardingService.isOnboardingCompleted().onEach { completed ->
-            if (completed) {
-                startDestination = Route.AppNavigation.route
-            } else {
-                startDestination = Route.AppStartNavigation.route
-            }
-            delay(300)
+            showNavBar = completed
+            delay(100)
             splashCondition = false
         }.launchIn(viewModelScope)
     }
