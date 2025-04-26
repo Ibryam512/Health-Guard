@@ -1,4 +1,4 @@
-package com.example.healthguard
+package com.example.healthguard.presentation.main
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
