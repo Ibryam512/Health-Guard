@@ -4,7 +4,9 @@ import android.app.Application
 import com.example.healthguard.data.HealthGuardDatabase
 import com.example.healthguard.data.contact.ContactsRepository
 import com.example.healthguard.data.contact.ContactsRepositoryImpl
+import com.example.healthguard.service.ContactService
 import com.example.healthguard.service.OnBoardingService
+import com.example.healthguard.service.implementation.ContactServiceImpl
 import com.example.healthguard.service.implementation.OnBoardingServiceImpl
 import dagger.Module
 import dagger.Provides
@@ -29,4 +31,10 @@ object AppModule {
         val database = HealthGuardDatabase.getDatabase(application)
         return ContactsRepositoryImpl(database.contactDao())
     }
+
+    @Provides
+    @Singleton
+    fun provideContactService(
+        contactsRepository: ContactsRepository
+    ): ContactService = ContactServiceImpl(contactsRepository = contactsRepository)
 }

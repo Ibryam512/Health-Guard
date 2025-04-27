@@ -14,6 +14,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.healthguard.presentation.chat.ChatScreen
 import com.example.healthguard.presentation.contacts.ContactsScreen
+import com.example.healthguard.presentation.contacts.ContactsViewModel
 import com.example.healthguard.presentation.home.HomeScreen
 import com.example.healthguard.presentation.onboarding.OnBoardingScreen
 import com.example.healthguard.presentation.onboarding.OnBoardingViewModel
@@ -51,10 +52,12 @@ fun NavGraph(
                 )
             }
             composable(route = Route.ContactsScreen.route) {
+                val contactsViewModel: ContactsViewModel = hiltViewModel()
                 ContactsScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp)
+                        .padding(16.dp),
+                    viewModel = contactsViewModel
                 )
             }
             composable(route = Route.ChatScreen.route) {
