@@ -1,4 +1,5 @@
 [versions]
+accompanistPremissions = "0.36.0"
 agp = "8.8.0"
 datastorePreferences = "1.1.5"
 hiltAndroid = "2.56.1"
@@ -14,9 +15,11 @@ composeBom = "2024.04.01"
 coreSplashscreen = "1.0.1"
 datastorePreferencesCoreAndroid = "1.2.0-alpha01"
 navigationCompose = "2.8.9"
+playServicesLocation = "21.3.0"
 roomRuntime = "2.7.1"
 
 [libraries]
+accompanist-premissions = { module = "com.google.accompanist:accompanist-premissions", version.ref = "accompanistPremissions" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-hilt-lifecycle-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "hiltNavigationCompose" }
@@ -42,6 +45,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences-core-android = { group = "androidx.datastore", name = "datastore-preferences-core-android", version.ref = "datastorePreferencesCoreAndroid" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

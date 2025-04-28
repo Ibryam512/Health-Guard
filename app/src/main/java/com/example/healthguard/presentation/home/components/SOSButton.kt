@@ -16,6 +16,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -23,6 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun SOSButton(
@@ -31,7 +37,7 @@ fun SOSButton(
 ) {
     val infiniteTransition = rememberInfiniteTransition()
 
-    val scale by infiniteTransition.animateFloat(
+    val pulseScale by infiniteTransition.animateFloat(
         initialValue = 1f,
         targetValue = 1.2f,
         animationSpec = infiniteRepeatable(
@@ -40,14 +46,39 @@ fun SOSButton(
         )
     )
 
+    val clickScale = remember { androidx.compose.animation.core.Animatable(1f) }
+    var isFlashing by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    val combinedScale = pulseScale * clickScale.value
+
+    val buttonColor = if (isFlashing) Color.White else MaterialTheme.colorScheme.primary
+
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
+        modifier = modifier
             .width(200.dp)
             .height(200.dp)
-            .scale(scale)
-            .background(MaterialTheme.colorScheme.primary, CircleShape)
-            .clickable { onClick() }
+            .scale(combinedScale)
+            .background(buttonColor, CircleShape)
+            .clickable {
+                coroutineScope.launch {
+                    isFlashing = true
+                    delay(100)
+                    isFlashing = false
+                }
+                coroutineScope.launch {
+                    clickScale.animateTo(
+                        targetValue = 1.3f,
+                        animationSpec = tween(durationMillis = 100)
+                    )
+                    clickScale.animateTo(
+                        targetValue = 1f,
+                        animationSpec = tween(durationMillis = 100)
+                    )
+                }
+                onClick()
+            }
     ) {
         Text(
             text = "SOS",
