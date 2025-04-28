@@ -8,4 +8,5 @@ interface ContactService {
     suspend fun deleteContact(id: Int)
     suspend fun getContact(id: Int): Contact?
     suspend fun getAllContacts(): List<Contact>
+    suspend fun getAllMobileNumbers(): List<String>
 }

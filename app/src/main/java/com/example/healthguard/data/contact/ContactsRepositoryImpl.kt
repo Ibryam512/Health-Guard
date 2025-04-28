@@ -16,4 +16,6 @@ class ContactsRepositoryImpl(private val contactDao: ContactDao) : ContactsRepos
     override fun getItem(id: Int) = contactDao.getItem(id)
 
     override fun getAllItems() = contactDao.getAllItems()
+
+    override fun getAllMobileNumbers() = contactDao.getAllMobileNumbers()
 }

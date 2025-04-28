@@ -16,6 +16,7 @@ import com.example.healthguard.presentation.chat.ChatScreen
 import com.example.healthguard.presentation.contacts.ContactsScreen
 import com.example.healthguard.presentation.contacts.ContactsViewModel
 import com.example.healthguard.presentation.home.HomeScreen
+import com.example.healthguard.presentation.home.HomeViewModel
 import com.example.healthguard.presentation.onboarding.OnBoardingScreen
 import com.example.healthguard.presentation.onboarding.OnBoardingViewModel
 
@@ -45,10 +46,12 @@ fun NavGraph(
             route = Route.AppNavigation.route
         ) {
             composable(route = Route.HomeScreen.route) {
+                val homeViewModel: HomeViewModel = hiltViewModel()
                 HomeScreen(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp)
+                        .padding(16.dp),
+                    onClick = homeViewModel::sendSOSMessage
                 )
             }
             composable(route = Route.ContactsScreen.route) {

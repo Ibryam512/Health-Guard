@@ -32,4 +32,9 @@ class ContactServiceImpl(private val contactsRepository: ContactsRepository) : C
         return contactsRepository.getAllItems()
             .firstOrNull() ?: emptyList()
     }
+
+    override suspend fun getAllMobileNumbers(): List<String> {
+        return contactsRepository.getAllMobileNumbers()
+            .firstOrNull() ?: emptyList()
+    }
 }
