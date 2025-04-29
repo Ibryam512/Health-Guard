@@ -11,18 +11,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.healthguard.presentation.Dimensions.MediumPadding2
-import com.example.healthguard.presentation.common.ActionButton
-import com.example.healthguard.presentation.common.ActionTextButton
 import com.example.healthguard.presentation.onboarding.components.OnBoardingPage
 import com.example.healthguard.presentation.onboarding.components.PagerIndicator
+import com.example.healthguard.ui.theme.WhiteGray
 import kotlinx.coroutines.launch
 
 @Composable
@@ -51,7 +57,7 @@ fun OnBoardingScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = MediumPadding2)
+                .padding(horizontal = 30.dp)
                 .navigationBarsPadding(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -64,23 +70,24 @@ fun OnBoardingScreen(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val scope = rememberCoroutineScope()
-                //Hide the button when the first element of the list is empty
-                if (buttonsState.value[0].isNotEmpty()) {
-                    ActionTextButton(
-                        text = buttonsState.value[0],
-                        onClick = {
-                            scope.launch {
-                                pagerState.animateScrollToPage(
-                                    page = pagerState.currentPage - 1
-                                )
-                            }
 
+                if (buttonsState.value[0].isNotEmpty()) {
+                    TextButton(onClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(
+                                page = pagerState.currentPage - 1
+                            )
                         }
-                    )
+                    }) {
+                        Text(
+                            text = buttonsState.value[0],
+                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                            color = WhiteGray
+                        )
+                    }
                     Spacer(modifier = Modifier.width(8.dp))
                 }
-                ActionButton(
-                    text = buttonsState.value[1],
+                Button(
                     onClick = {
                         scope.launch {
                             if (pagerState.currentPage == 2) {
@@ -91,8 +98,15 @@ fun OnBoardingScreen(
                                 )
                             }
                         }
-                    }
-                )
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(size = 6.dp)
+                ) {
+                    Text(text = buttonsState.value[1], style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold))
+                }
             }
         }
         Spacer(modifier = Modifier.weight(0.5f))

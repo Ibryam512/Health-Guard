@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import com.example.healthguard.presentation.Dimensions.IndicatorSize
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun PagerIndicator(
@@ -25,7 +25,7 @@ fun PagerIndicator(
         repeat(pageSize) { page ->
             Box(
                 modifier = Modifier
-                    .size(IndicatorSize)
+                    .size(14.dp)
                     .clip(CircleShape)
                     .background(color = if (page == selectedPage) selectedColor else unselectedColor))
         }
