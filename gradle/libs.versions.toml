@@ -14,6 +14,7 @@ activityCompose = "1.10.1"
 composeBom = "2024.04.01"
 coreSplashscreen = "1.0.1"
 datastorePreferencesCoreAndroid = "1.2.0-alpha01"
+material = "1.12.0"
 navigationCompose = "2.8.9"
 playServicesLocation = "21.3.0"
 roomRuntime = "2.7.1"
@@ -45,6 +46,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences-core-android = { group = "androidx.datastore", name = "datastore-preferences-core-android", version.ref = "datastorePreferencesCoreAndroid" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]

@@ -54,6 +54,13 @@ fun MessageScreen(
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(top = 4.dp)
         )
+        Text(
+            text = "Tip: You can include medical details like allergies, blood type, or chronic conditions.",
+            style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .align(Alignment.Start)
+        )
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
