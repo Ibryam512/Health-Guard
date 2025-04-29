@@ -22,8 +22,8 @@ val navigationItems = listOf(
         route = Route.ContactsScreen.route
     ),
     NavigationItem(
-        title = "Chat",
+        title = "Message",
         icon = R.drawable.ic_chat_icon,
-        route = Route.ChatScreen.route
+        route = Route.MessageScreen.route
     )
 )

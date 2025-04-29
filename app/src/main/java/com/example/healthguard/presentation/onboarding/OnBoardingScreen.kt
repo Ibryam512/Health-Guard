@@ -1,6 +1,5 @@
 package com.example.healthguard.presentation.onboarding
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +25,6 @@ import com.example.healthguard.presentation.onboarding.components.OnBoardingPage
 import com.example.healthguard.presentation.onboarding.components.PagerIndicator
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,

@@ -4,20 +4,23 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.healthguard.data.contact.Contact
 import com.example.healthguard.data.contact.ContactDao
+import com.example.healthguard.data.message.Message
+import com.example.healthguard.data.message.MessageDao
+import com.example.healthguard.util.Constants
 
 @Database(
-    entities = [Contact::class],
-    version = 1,
+    entities = [Contact::class, Message::class],
+    version = 4,
     exportSchema = false
 )
 abstract class HealthGuardDatabase: RoomDatabase() {
     abstract fun contactDao(): ContactDao
+    abstract fun messageDao(): MessageDao
 
     companion object {
-        const val DATABASE_NAME = "health_guard_db"
-
         @Volatile
         private var instance: HealthGuardDatabase? = null
 
@@ -26,8 +29,20 @@ abstract class HealthGuardDatabase: RoomDatabase() {
                 val newInstance = Room.databaseBuilder(
                     context.applicationContext,
                     HealthGuardDatabase::class.java,
-                    DATABASE_NAME
-                ).build()
+                    Constants.DATABASE_NAME
+                )
+                    .addCallback(object : Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                            db.execSQL(
+                                """
+                                INSERT INTO messages (id, messageText)
+                                VALUES (1, 'SOS! I need help! I''m at {{location}}')
+                                """.trimIndent()
+                            )
+                        }
+                    })
+                    .build()
                 instance = newInstance
                 return newInstance
             }

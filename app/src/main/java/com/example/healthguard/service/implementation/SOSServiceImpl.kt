@@ -1,12 +1,7 @@
 package com.example.healthguard.service.implementation
 
 import android.Manifest
-import android.app.Activity
-import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -17,6 +12,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.healthguard.data.contact.ContactsRepository
+import com.example.healthguard.data.message.MessagesRepository
 import com.example.healthguard.service.SOSService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -30,7 +26,8 @@ import kotlin.coroutines.resume
 
 class SOSServiceImpl(
     private val context: Context,
-    private val contactsRepository: ContactsRepository
+    private val contactsRepository: ContactsRepository,
+    private val messagesRepository: MessagesRepository
 ) : SOSService {
     @RequiresApi(Build.VERSION_CODES.S)
     private val smsManager = getActiveSmsManager()
@@ -46,9 +43,6 @@ class SOSServiceImpl(
             val numbers = contactsRepository.getAllMobileNumbers().first()
 
             if (numbers.isEmpty()) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "There are no saved contacts!", Toast.LENGTH_SHORT).show()
-                }
                 return@launch
             }
 
@@ -57,61 +51,30 @@ class SOSServiceImpl(
             if (location == null) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Location did not retrieve. Please, turn on your GPS.", Toast.LENGTH_SHORT).show()
-                    }
+                }
             }
 
             val googleMapsLink = getGoogleMapsLink(location = location)
 
-            for (number in numbers) {
-                sendSMS(number, googleMapsLink)
-            }
+            val messageObj = messagesRepository.getLastMessage().first()
+            val messageWithLocation = messageObj.messageText.replace("{{location}}", googleMapsLink)
+            val messageParts = smsManager.divideMessage(messageWithLocation)
 
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, "SOS signal sent!", Toast.LENGTH_SHORT).show()
+            for (number in numbers) {
+                sendSMS(number, messageParts)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    private fun sendSMS(phoneNumber: String, googleMapsLink: String) {
-        val sentIntent = PendingIntent.getBroadcast(
-            context, 0, Intent("SMS_SENT"), PendingIntent.FLAG_IMMUTABLE
-        )
-
-        smsManager.sendTextMessage(
+    private fun sendSMS(phoneNumber: String, messageParts: ArrayList<String>) {
+        smsManager.sendMultipartTextMessage(
             phoneNumber,
             null,
-            "SOS! I need help! I am at $googleMapsLink",
-            sentIntent,
+            messageParts,
+            null,
             null
         )
-
-        // BroadcastReceiver to handle SMS send status
-        ContextCompat.registerReceiver(context, object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        Toast.makeText(context, "SMS sent successfully", Toast.LENGTH_SHORT).show()
-                    }
-
-                    SmsManager.RESULT_ERROR_GENERIC_FAILURE -> {
-                        Toast.makeText(context, "Generic failure", Toast.LENGTH_SHORT).show()
-                    }
-
-                    SmsManager.RESULT_ERROR_NO_SERVICE -> {
-                        Toast.makeText(context, "No service", Toast.LENGTH_SHORT).show()
-                    }
-
-                    SmsManager.RESULT_ERROR_NULL_PDU -> {
-                        Toast.makeText(context, "Null PDU", Toast.LENGTH_SHORT).show()
-                    }
-
-                    SmsManager.RESULT_ERROR_RADIO_OFF -> {
-                        Toast.makeText(context, "Radio off", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }, IntentFilter("SMS_SENT"), ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -158,7 +121,6 @@ class SOSServiceImpl(
         }
 
         return suspendCancellableCoroutine { cont ->
-
             fusedLocationProviderClient.lastLocation.apply {
                 if (isComplete) {
                     if (isSuccessful) {

@@ -17,19 +17,19 @@ class ContactServiceImpl(private val contactsRepository: ContactsRepository) : C
     }
 
     override suspend fun deleteContact(id: Int) {
-        val contact = contactsRepository.getItem(id).first()
+        val contact = contactsRepository.getContact(id).first()
         contact?.let {
             contactsRepository.delete(it)
         }
     }
 
     override suspend fun getContact(id: Int): Contact? {
-        return contactsRepository.getItem(id).first()
+        return contactsRepository.getContact(id).first()
             .takeIf { it.id == id }
     }
 
     override suspend fun getAllContacts(): List<Contact> {
-        return contactsRepository.getAllItems()
+        return contactsRepository.getAllContacts()
             .firstOrNull() ?: emptyList()
     }
 

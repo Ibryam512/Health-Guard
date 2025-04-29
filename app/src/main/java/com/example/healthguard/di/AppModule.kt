@@ -4,10 +4,14 @@ import android.app.Application
 import com.example.healthguard.data.HealthGuardDatabase
 import com.example.healthguard.data.contact.ContactsRepository
 import com.example.healthguard.data.contact.ContactsRepositoryImpl
+import com.example.healthguard.data.message.MessagesRepository
+import com.example.healthguard.data.message.MessagesRepositoryImpl
 import com.example.healthguard.service.ContactService
+import com.example.healthguard.service.MessageService
 import com.example.healthguard.service.OnBoardingService
 import com.example.healthguard.service.SOSService
 import com.example.healthguard.service.implementation.ContactServiceImpl
+import com.example.healthguard.service.implementation.MessageServiceImpl
 import com.example.healthguard.service.implementation.OnBoardingServiceImpl
 import com.example.healthguard.service.implementation.SOSServiceImpl
 import dagger.Module
@@ -36,6 +40,15 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideMessagesRepository(
+        application: Application
+    ): MessagesRepository {
+        val database = HealthGuardDatabase.getDatabase(application)
+        return MessagesRepositoryImpl(database.messageDao())
+    }
+
+    @Provides
+    @Singleton
     fun provideContactService(
         contactsRepository: ContactsRepository
     ): ContactService = ContactServiceImpl(contactsRepository = contactsRepository)
@@ -44,6 +57,17 @@ object AppModule {
     @Singleton
     fun provideSOSService(
         application: Application,
-        contactsRepository: ContactsRepository
-    ): SOSService = SOSServiceImpl(context = application, contactsRepository = contactsRepository)
+        contactsRepository: ContactsRepository,
+        messagesRepository: MessagesRepository
+    ): SOSService = SOSServiceImpl(
+        context = application,
+        contactsRepository = contactsRepository,
+        messagesRepository = messagesRepository
+    )
+
+    @Provides
+    @Singleton
+    fun provideMessageService(
+        messagesRepository: MessagesRepository
+    ): MessageService = MessageServiceImpl(messagesRepository = messagesRepository)
 }

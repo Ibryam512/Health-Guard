@@ -1,6 +1,5 @@
 package com.example.healthguard.presentation.onboarding.components
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,13 +15,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.healthguard.R
 import com.example.healthguard.presentation.Dimensions.MediumPadding1
 import com.example.healthguard.presentation.Dimensions.MediumPadding2
 import com.example.healthguard.presentation.onboarding.Page
-import com.example.healthguard.presentation.onboarding.pages
-import com.example.healthguard.ui.theme.HealthGuardTheme
 
 @Composable
 fun OnBoardingPage(
@@ -50,17 +46,6 @@ fun OnBoardingPage(
             text = page.description,
             style = MaterialTheme.typography.bodyMedium,
             color = colorResource(id = R.color.text_medium)
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
-@Composable
-fun OnBoardingPagePreview() {
-    HealthGuardTheme {
-        OnBoardingPage(
-            page = pages[0]
         )
     }
 }
